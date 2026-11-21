@@ -6,7 +6,7 @@ from numba import njit
 from Euler import euler
 from EulerKromer import euler_kromer
 from EMP import emp
-from KD import kd
+from KD1 import kd
 from RK4 import rk4
 
 # ----------------------------- параметры ------------------------------------
@@ -53,7 +53,7 @@ methods = [
     # ("Euler-Cromer", njit(euler_kromer)),
     # ("EMP", njit(emp)),
     ("VSKD", njit(kd)),
-    ("RK4", njit(rk4)),
+    # ("RK4", njit(rk4)),
 ]
 
 

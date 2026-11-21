@@ -11,7 +11,7 @@ def kd(f, u0, t0, t1, h, a1, a2, a3, s=0.5):
     h1 = h * s
     h2 = h * (1 - s)
 
-    n = int((t1 - t0) / h)
+    n = int(round((t1 - t0) / h))
     t = t0 + h * np.arange(n + 1)
     u = np.zeros((n + 1, len(u0)))
 

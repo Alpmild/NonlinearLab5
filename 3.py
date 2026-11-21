@@ -20,7 +20,7 @@ LAM_TOL = 1e-3  # |lambda| <= LAM_TOL считаем нулевым показа
 PLOT_POINTS = 3000
 ERR_FLOOR = 1e-18
 COUPLING_K = 1.0  # сила связи K
-TAU = 1.0  # задержка tau (округляется до целого числа шагов h)
+TAU = 50.0  # задержка tau (округляется до целого числа шагов h)
 save_folder = "t3_feedback_sync_plots"
 os.makedirs(save_folder, exist_ok=True)
 
@@ -51,9 +51,9 @@ def f(u, a1, a2, a3):
 
 
 methods = [
-    # ("Euler", njit(euler)),
-    # ("Euler-Cromer", njit(euler_kromer)),
-    # ("EMP", njit(emp)),
+    ("Euler", njit(euler)),
+    ("Euler-Cromer", njit(euler_kromer)),
+    ("EMP", njit(emp)),
     ("VSKD", njit(kd)),
     ("RK4", njit(rk4)),
 ]
@@ -228,8 +228,8 @@ def analyze_feedback(method, k, u0_drive, u0_resp, K=COUPLING_K, tau=TAU):
 # ============================================================================
 def plot_axis(method_name, var_name, r):
     fig, (ax1, ax2) = plt.subplots(2, 1, figsize=(10, 8), sharex=True)
-
     t = r["t"]
+
     # одни и те же точки для обоих графиков
     idx_pts = np.linspace(0, len(t) - 1, PLOT_POINTS).astype(int)
 
@@ -249,8 +249,7 @@ def plot_axis(method_name, var_name, r):
     ax2.set_xlabel("t")
     ax2.set_ylabel("||x2(t) - x1(t - tau)||")
     ax2.grid(True, alpha=0.3)
-    l1, l2, l3 = r["lam"]
-    ax2.set_title(f"Ошибка, lambda = ({l1:+.4f}; {l2:+.4f}; {l3:+.4f})")
+    ax2.set_title("Ошибка синхронизации")
 
     fig.suptitle(f"Sprott Case B: связь по {var_name} с запаздыванием, "
                  f"K = {COUPLING_K}, tau = {TAU}, {method_name}")
